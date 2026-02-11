@@ -1,16 +1,5 @@
 import { ParsedCommand, CommandType } from "../types/index.js";
-
-/**
- * Token address mappings for common tokens on Base
- */
-const TOKEN_SYMBOLS: Record<string, string> = {
-  ETH: "0x0000000000000000000000000000000000000000",
-  WETH: "0x4200000000000000000000000000000000000006",
-  USDC: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
-  USDbC: "0xd9aAEc86B65d86f6A7B5B1b0c42FFA531710b6CA",
-  DAI: "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
-  wUSDM: "0x459996A84E0c0d4131D5338947C4e7826A9532F1",
-};
+import { tokenRegistry } from "./TokenRegistry.js";
 
 /**
  * Number word to number mapping
@@ -217,20 +206,14 @@ export class CommandParser {
    * Convert a token symbol to address
    */
   symbolToAddress(symbol: string): string {
-    return TOKEN_SYMBOLS[symbol.toUpperCase()] || symbol;
+    return tokenRegistry.symbolToAddress(symbol);
   }
 
   /**
    * Convert an address to token symbol (if known)
    */
   addressToSymbol(address: string): string | null {
-    const lower = address.toLowerCase();
-    for (const [symbol, addr] of Object.entries(TOKEN_SYMBOLS)) {
-      if (addr.toLowerCase() === lower) {
-        return symbol;
-      }
-    }
-    return null;
+    return tokenRegistry.addressToSymbol(address);
   }
 
   /**

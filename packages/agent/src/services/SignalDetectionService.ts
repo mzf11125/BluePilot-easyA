@@ -253,7 +253,7 @@ export class SignalDetectionService {
       }
 
       // Check daily volume limit
-      const dailyVolume = this.executedTrades.get(userId) || 0n;
+      const dailyVolume = this.executedTrades.get(userId) || 0;
       if (BigInt(dailyVolume) >= BigInt(config.maxDailyVolume)) {
         continue;
       }
@@ -272,7 +272,7 @@ export class SignalDetectionService {
         // Update daily volume
         this.executedTrades.set(
           userId,
-          BigInt(Math.floor(dailyVolume)) + BigInt(Math.floor(parseFloat(config.maxTradeSize)))
+          Number(dailyVolume) + parseFloat(config.maxTradeSize)
         );
 
         // Track position

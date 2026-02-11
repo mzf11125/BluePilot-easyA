@@ -1,4 +1,10 @@
-# Contributing to Percolator
+
+# Contributing to BluePilot
+
+[!IMPORTANT]
+**BluePilot: Anti-loss AI + Hands-free trading**
+
+Set your rules once—trade automatically and safely within them. BluePilot combines anti-loss AI, secure smart contracts, and a mobile-first experience for effortless, policy-driven DeFi trading.
 
 We welcome contributions! Please:
 - Fork the repo and create a feature branch

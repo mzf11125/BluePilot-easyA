@@ -1,6 +1,12 @@
 
 
+
 # Technology Stack: BluePilot — Hands-Free DeFi Trading
+
+[!IMPORTANT]
+**BluePilot: Anti-loss AI + Hands-free trading**
+
+Set your rules once—trade automatically and safely within them. BluePilot combines anti-loss AI, secure smart contracts, and a mobile-first experience for effortless, policy-driven DeFi trading.
 
 BluePilot is built for hands-free, rule-based DeFi trading. The stack supports automation, on-chain policy enforcement, and a mobile-first experience.
 

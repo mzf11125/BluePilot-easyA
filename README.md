@@ -1,6 +1,12 @@
 
 
+
 # BluePilot — Hands-Free DeFi Trading on Base
+
+[!IMPORTANT]
+**BluePilot: Anti-loss AI + Hands-free trading**
+
+Set your rules once—trade automatically and safely within them. BluePilot combines anti-loss AI, secure smart contracts, and a mobile-first experience for effortless, policy-driven DeFi trading.
 
 BluePilot is a mobile-first, hands-free DeFi trading app that lets users tell an AI what they want to do and have trades executed automatically within safe, on-chain limits.
 

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { commandParser } from "../services/CommandParser.js";
 import { getContractService } from "../services/ContractService.js";
+import { tokenRegistry } from "../services/TokenRegistry.js";
 import {
   AgentRequest,
   SimulateResponse,
@@ -31,6 +32,14 @@ router.post("/simulate", async (req, res) => {
 
     // Parse the command
     const parsed = commandParser.parse(command);
+
+    // Fetch dynamic token info if swap command
+    if (parsed.type === "swap" && parsed.tokenIn && parsed.tokenOut) {
+      await Promise.all([
+        tokenRegistry.getTokenBySymbol(parsed.tokenIn),
+        tokenRegistry.getTokenBySymbol(parsed.tokenOut),
+      ]);
+    }
 
     const response: SimulateResponse = {
       valid: parsed.type !== "unknown",

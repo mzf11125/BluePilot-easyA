@@ -328,7 +328,7 @@ export class SocialTradingService {
         traderAddress: originalTrade.traderAddress,
         originalTxHash: originalTrade.txHash,
         executed: true,
-        txHash: "0x" + Math.random().toString(16).slice(2), // Mock tx hash
+        newTxHash: "0x" + Math.random().toString(16).slice(2), // Mock tx hash
         amountCopied: copyAmount,
         timestamp: Date.now(),
       };

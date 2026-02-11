@@ -1,4 +1,10 @@
+
 # Security Policy
+
+[!IMPORTANT]
+**BluePilot: Anti-loss AI + Hands-free trading**
+
+Set your rules once—trade automatically and safely within them. BluePilot combines anti-loss AI, secure smart contracts, and a mobile-first experience for effortless, policy-driven DeFi trading.
 
 ## Overview
 Percolator follows best practices for smart contract and application security. All contracts use OpenZeppelin libraries, are protected against reentrancy, and are verified on Basescan.

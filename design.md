@@ -1,15 +1,17 @@
 
-# Design Document: Percolator DeFi Trading Copilot
+
+# Design Document: BluePilot — Hands-Free DeFi Trading
 
 ## Overview
 
-Percolator is a mobile-first DeFi trading copilot with three core components:
+BluePilot is a mobile-first, hands-free DeFi trading platform. Users set their trading rules once—trade size, slippage, cooldowns, and allowed tokens—and BluePilot executes trades automatically within those safe, on-chain limits. The system is built for automation, security, and accessibility.
 
-1. **Smart Contracts (Base L2):** VaultRouter, TradeExecutor, PolicyGuard for funds, trades, and risk enforcement
-2. **OpenClaw Agent:** Conversational AI using Gateway Protocol for intent parsing and transaction generation
-3. **React Native Mobile App:** Wallet integration, trade execution, policy management, and history
+**Core Components:**
+1. **Smart Contracts (Base L2):** VaultRouter, TradeExecutor, PolicyGuard for funds, trades, and rule enforcement
+2. **BluePilot Agent:** Conversational AI using Gateway Protocol for intent parsing and transaction generation
+3. **React Native Mobile App:** Wallet integration, hands-free trade execution, policy management, and history
 
-The system is designed for security (user-controlled signing, on-chain policy enforcement), gas efficiency, and a mobile-first, accessible user experience.
+The architecture prioritizes hands-free automation (set rules, trade automatically), user-controlled signing, on-chain policy enforcement, and a mobile-first, accessible experience.
 
 ## System Architecture
 

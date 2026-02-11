@@ -1,34 +1,13 @@
-# Project Structure
+
+# Project Structure: BluePilot — Hands-Free DeFi Trading
 
 ## Monorepo Organization
 
-The project uses a monorepo structure with three main packages:
-
-```
-percolator/
-├── packages/
-│   ├── contracts/          # Smart contracts (Hardhat)
-│   ├── agent/              # OpenClaw agent API (Node.js/Express)
-│   └── mobile/             # React Native mobile app (Expo)
-├── .kiro/
-│   ├── specs/
-│   │   └── percolator-defi-agent/
-│   │       ├── requirements.md
-│   │       ├── design.md
-│   │       └── tasks.md
-│   └── steering/
-│       ├── product.md
-│       ├── tech.md
-│       └── structure.md
-└── package.json            # Root package.json for workspace
-
-# Project Structure
-
-## Monorepo Organization
+The BluePilot codebase is organized for hands-free, rule-based DeFi trading. Each package supports automation, policy enforcement, and mobile-first experience.
 
 ```mermaid
 flowchart TD
-  A[percolator/]
+  A[bluepilot/]
   A1[packages/]
   A2[.kiro/]
   A3[package.json]
@@ -36,7 +15,7 @@ flowchart TD
   A --> A2
   A --> A3
   A1a[contracts/\nSmart contracts (Hardhat)]
-  A1b[agent/\nOpenClaw agent API (Node.js/Express)]
+  A1b[agent/\nBluePilot agent API (Node.js/Express)]
   A1c[mobile/\nReact Native mobile app (Expo)]
   A1 --> A1a
   A1 --> A1b
@@ -45,7 +24,7 @@ flowchart TD
   A2b[steering/]
   A2 --> A2a
   A2 --> A2b
-  A2a1[percolator-defi-agent/]
+  A2a1[bluepilot-defi-agent/]
   A2a --> A2a1
   A2a1a[requirements.md]
   A2a1b[design.md]
@@ -62,9 +41,9 @@ flowchart TD
 ```
 
 ### Key Directories
-- **contracts/**: Solidity smart contracts (VaultRouter, TradeExecutor, PolicyGuard)
-- **agent/**: OpenClaw agent API (Node.js/Express)
-- **mobile/**: React Native mobile app (Expo, TWA)
+- **contracts/**: Solidity smart contracts (VaultRouter, TradeExecutor, PolicyGuard) for rule-based automation
+- **agent/**: BluePilot agent API (Node.js/Express) for hands-free, intent-based trading
+- **mobile/**: React Native mobile app (Expo, TWA) for user interface and wallet integration
 - **.kiro/**: Specs, design, and steering docs
 
 ---

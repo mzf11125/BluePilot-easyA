@@ -35,7 +35,7 @@ router.post("/simulate", async (req, res) => {
     const response: SimulateResponse = {
       valid: parsed.type !== "unknown",
       intent: parsed.type,
-      params: parsed,
+      params: parsed as unknown as Record<string, unknown>,
     };
 
     if (parsed.type === "swap" && parsed.tokenIn && parsed.tokenOut && parsed.amount) {

@@ -1,8 +1,8 @@
 import { ethers, Contract } from "ethers";
 import { Policy, SimulationData, TransactionData, NetworkConfig, NETWORKS } from "../types/index.js";
-import VAULT_ROUTER_ABI from "../abis/VaultRouter.json" assert { type: "json" };
-import TRADE_EXECUTOR_ABI from "../abis/TradeExecutor.json" assert { type: "json" };
-import ERC20_ABI from "../abis/ERC20.json" assert { type: "json" };
+import VAULT_ROUTER_ABI from "../abis/VaultRouter.json";
+import TRADE_EXECUTOR_ABI from "../abis/TradeExecutor.json";
+import ERC20_ABI from "../abis/ERC20.json";
 
 /**
  * Service for interacting with BluePilot smart contracts

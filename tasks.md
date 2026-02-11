@@ -1,9 +1,10 @@
 
-# Implementation Plan: Percolator DeFi Trading Copilot
+
+# Implementation Plan: BluePilot — Hands-Free DeFi Trading
 
 ## Overview
 
-This plan breaks down Percolator into actionable tasks across smart contracts, agent, and mobile app. Accessibility and code quality are prioritized throughout. Code/config examples and alt text are included for clarity.
+This plan breaks down BluePilot into actionable tasks for hands-free, rule-based DeFi trading. Each component—smart contracts, agent, and mobile app—supports automation, policy enforcement, and a mobile-first experience. Accessibility and code quality are prioritized throughout. Code/config examples and alt text are included for clarity.
 
 ## Tasks
 

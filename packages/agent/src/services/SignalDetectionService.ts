@@ -272,7 +272,7 @@ export class SignalDetectionService {
         // Update daily volume
         this.executedTrades.set(
           userId,
-          BigInt(dailyVolume) + BigInt(config.maxTradeSize)
+          BigInt(Math.floor(dailyVolume)) + BigInt(Math.floor(parseFloat(config.maxTradeSize)))
         );
 
         // Track position

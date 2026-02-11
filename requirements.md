@@ -1,22 +1,24 @@
-# Requirements Document: Percolator DeFi Trading Copilot
+
+# Requirements Document: BluePilot — Hands-Free DeFi Trading
 
 ## Introduction
 
-Percolator is a mobile-first DeFi trading copilot that combines smart contracts on Base L2, an OpenClaw agent for chat-based intent processing, and a React Native mobile interface. The system enables users to execute trades with configurable risk policies while maintaining security through on-chain enforcement and user-controlled transaction signing.
+BluePilot is a mobile-first, hands-free DeFi trading platform. Users set their trading rules once—trade size, slippage, cooldowns, and allowed tokens—and BluePilot executes trades automatically within those safe, on-chain limits. The system combines smart contracts on Base L2, a conversational AI agent for intent processing, and a React Native mobile interface. All trades are executed within user-defined, on-chain policies, with full user control and security.
+
 
 ## Glossary
 
-- **Percolator**: The complete DeFi trading copilot system
+- **BluePilot**: The complete hands-free DeFi trading system
 - **Base_L2**: Ethereum Layer 2 network (Chain ID: 8453) where smart contracts are deployed
-- **VaultRouter**: Smart contract managing user deposits, withdrawals, and policy configuration
+- **VaultRouter**: Smart contract managing user deposits, withdrawals, and rule configuration
 - **TradeExecutor**: Smart contract executing DEX trades with slippage protection
-- **PolicyGuard**: Smart contract validating trades against user-defined risk policies
-- **OpenClaw_Agent**: AI agent processing natural language trading intents via Gateway Protocol
+- **PolicyGuard**: Smart contract validating trades against user-defined rules
+- **BluePilot_Agent**: AI agent processing natural language trading intents via Gateway Protocol
 - **Mobile_App**: React Native + Expo frontend application
 - **TWA**: Trusted Web Activity - Android app wrapper for web content
-- **User_Policy**: Configuration defining max slippage, trade size limits, cooldown periods, and token allowlist
+- **User_Rules**: Configuration defining max slippage, trade size limits, cooldown periods, and token allowlist
 - **DEX**: Decentralized Exchange (Uniswap V2 on Base)
-- **Gateway_Protocol**: OpenClaw's secure agent-user interaction protocol
+- **Gateway_Protocol**: BluePilot's secure agent-user interaction protocol
 
 ## Requirements
 

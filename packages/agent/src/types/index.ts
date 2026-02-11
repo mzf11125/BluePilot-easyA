@@ -242,6 +242,8 @@ export interface NetworkConfig {
   wethAddress: string;
   /** Uniswap Router address */
   uniswapRouter: string;
+  /** RobinPump Router address (optional) */
+  robinPumpRouter?: string;
 }
 
 export const NETWORKS: Record<number, NetworkConfig> = {
@@ -260,7 +262,7 @@ export const NETWORKS: Record<number, NetworkConfig> = {
     rpcUrl: process.env.BASE_SEPOLIA_RPC_URL || "https://sepolia.base.org",
     explorerUrl: "https://sepolia.basescan.org",
     wethAddress: "0x4200000000000000000000000000000000000006",
-    uniswapRouter: "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24",
+    uniswapRouter: "0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD",
     robinPumpRouter: process.env.ROBINPUMP_ROUTER || "0x0000000000000000000000000000000000000000",
   },
 };

@@ -1,29 +1,38 @@
 
-# Percolator DeFi Trading Copilot
 
-Percolator is a mobile-first DeFi trading copilot that combines secure smart contracts, an AI-powered agent, and a modern mobile app to make DeFi trading safe, accessible, and conversational.
+# BluePilot — Hands-Free DeFi Trading on Base
+
+BluePilot is a mobile-first, hands-free DeFi trading app that lets users tell an AI what they want to do and have trades executed automatically within safe, on-chain limits.
+
+Instead of constantly watching charts, manually swapping tokens, or reacting emotionally to market moves, users define simple trading rules once — and BluePilot handles the rest.
+
+Powered by secure smart contracts, an AI agent, and a modern mobile app, BluePilot makes trading on Base safer, simpler, and always under your control.
 
 ## Architecture
 
 ```mermaid
 graph TD
-	A[Mobile App (React Native/Expo)] -- WalletConnect, Policy, Trade, History --> B[OpenClaw Agent]
+	A[Mobile App (React Native/Expo)] -- WalletConnect, Policy, Trade, History --> B[BluePilot Agent]
 	B -- Gateway Protocol --> C[Smart Contracts (Base L2)]
 	C -- VaultRouter, TradeExecutor, PolicyGuard --> D[DEX (Uniswap V2 on Base)]
 	C -- Events --> A
 ```
 
 ## Features
-- **Conversational Trading:** Use natural language to simulate and execute trades.
-- **On-Chain Risk Management:** Enforce slippage, trade size, cooldown, and allowlist policies on-chain.
-- **Mobile-First:** Intuitive app with wallet connection, dark mode, and responsive design.
-- **Auditability:** All actions are on-chain and verifiable via Basescan.
-- **Security:** User-controlled keys, contract-based enforcement, and best practices.
+
+* **Hands-Free Trading:** Tell BluePilot what you want in natural language. It prepares and executes trades within your predefined rules.
+* **Policy-Based Automation:** Set limits for trade size, slippage, cooldowns, and allowed tokens. Smart contracts enforce them on-chain.
+* **Conversational Control:** Adjust strategies, simulate trades, and manage policies through simple chat commands.
+* **Mobile-First Experience:** Clean, fast interface with wallet connection, dark mode, and responsive design.
+* **On-Chain Auditability:** Every action is transparent and verifiable via Basescan.
+* **Security by Design:** Users keep full custody. Transactions require user approval, and enforcement happens at the contract level.
 
 ## Packages
-- `packages/agent`: OpenClaw AI agent for chat-based trading and policy management.
-- `packages/contracts`: Solidity smart contracts for vaults, trading, and policy enforcement.
-- `packages/mobile`: React Native app for user interface and wallet integration.
+
+* `packages/agent`: AI agent for intent-based, hands-free trading and policy management
+* `packages/contracts`: Solidity smart contracts for vaults, trade execution, and risk enforcement
+* `packages/mobile`: React Native app for user interface and wallet integration
+
 
 ## Quick Start
 

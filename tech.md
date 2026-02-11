@@ -1,5 +1,8 @@
 
-# Technology Stack
+
+# Technology Stack: BluePilot — Hands-Free DeFi Trading
+
+BluePilot is built for hands-free, rule-based DeFi trading. The stack supports automation, on-chain policy enforcement, and a mobile-first experience.
 
 ## Smart Contracts
 

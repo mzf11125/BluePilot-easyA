@@ -72,7 +72,9 @@ export const TOKEN_METADATA: Record<string, { symbol: string; name: string; deci
 };
 
 // DEX Router addresses
-export const UNISWAP_V2_ROUTER = "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24";
+export const UNISWAP_V2_ROUTER_MAINNET = "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24";
+export const UNISWAP_V2_ROUTER_SEPOLIA = "0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD";
+export const UNISWAP_V2_ROUTER = UNISWAP_V2_ROUTER_MAINNET;
 
 // RobinPump Router addresses (will be updated after deployment)
 export const ROBINPUMP_ROUTER = process.env.EXPO_PUBLIC_ROBINPUMP_ROUTER || "0x0000000000000000000000000000000000000000";

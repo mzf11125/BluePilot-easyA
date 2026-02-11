@@ -6,6 +6,7 @@ import React, { forwardRef } from "react";
 import {
   TouchableOpacity,
   Text,
+  View,
   StyleSheet,
   ViewStyle,
   TextStyle,
@@ -26,6 +27,8 @@ interface ButtonProps extends Omit<TouchableOpacityProps, "style"> {
   fullWidth?: boolean;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
+  children?: React.ReactNode;
+  style?: ViewStyle | ViewStyle[];
 }
 
 export const Button = forwardRef<TouchableOpacity, ButtonProps>(

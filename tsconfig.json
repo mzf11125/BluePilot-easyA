@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -10,16 +12,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": ".",
-    "composite": true,
-    "references": [
-      { "path": "./packages/contracts" },
-      { "path": "./packages/agent" },
-      { "path": "./packages/mobile" }
-    ]
+    "rootDir": "."
   },
   "exclude": [
     "node_modules",
@@ -31,5 +25,6 @@
     "packages/*/artifacts",
     "packages/*/cache",
     "packages/*/typechain-types"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }

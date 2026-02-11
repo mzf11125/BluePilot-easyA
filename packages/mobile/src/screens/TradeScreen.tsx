@@ -143,7 +143,7 @@ export const TradeScreen: React.FC = () => {
 
       {/* Swap Button */}
       <TouchableOpacity style={styles.swapButton} onPress={handleSwapTokens}>
-        <View style={[styles.swapIcon, { backgroundColor: colors.primary }]}>
+        <View style={[styles.swapIcon, { backgroundColor: colors.primary, borderColor: colors.border }]}>
           <Text style={styles.arrow}>↓</Text>
         </View>
       </TouchableOpacity>
@@ -316,7 +316,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 4,
-    borderColor: Colors.dark.bg,
   },
   arrow: {
     color: "#FFFFFF",

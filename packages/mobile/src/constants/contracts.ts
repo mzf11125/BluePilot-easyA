@@ -2,7 +2,6 @@
  * Contract constants for BluePilot app
  */
 
-import { NETWORKS } from "@/types/network";
 
 // Contract addresses (update these after deployment)
 export const CONTRACT_ADDRESSES = {

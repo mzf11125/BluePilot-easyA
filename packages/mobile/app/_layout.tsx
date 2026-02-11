@@ -17,8 +17,13 @@ export default function RootLayout() {
               headerShown: false,
             }}
           >
-            <Stack.Screen name="index" redirect to="/home" />
             <Stack.Screen name="(tabs)" />
+            <Stack.Screen
+              name="index"
+              options={{
+                href: null, // Hide this route from navigation
+              }}
+            />
           </Stack>
         </NetworkGuard>
       </WalletProvider>

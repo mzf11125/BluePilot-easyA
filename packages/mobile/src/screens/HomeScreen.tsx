@@ -92,7 +92,7 @@ export const HomeScreen: React.FC = () => {
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
             Your AI-powered DeFi trading copilot on Base
           </Text>
-          <View style={styles illustration}>
+          <View style={styles.illustration}>
             <View style={[styles.illustrationCircle, { borderColor: colors.primary }]}>
               <Text style={[styles.illustrationIcon]}>⚡</Text>
             </View>

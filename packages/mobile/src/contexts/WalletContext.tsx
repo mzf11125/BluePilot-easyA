@@ -6,8 +6,6 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ethers } from "ethers";
 
-// Using WalletConnect v2
-import { WalletConnect, INITIAL_STATE } from "./WalletConnectContext";
 
 interface WalletState {
   isConnected: boolean;

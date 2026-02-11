@@ -11,6 +11,7 @@ import {
   ViewStyle,
   TextStyle,
   TextInputProps,
+  TouchableOpacity,
 } from "react-native";
 import { Colors, BorderRadius, Spacing, Typography } from "@/constants";
 import { useTheme } from "@/contexts/ThemeContext";

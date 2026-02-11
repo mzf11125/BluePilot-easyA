@@ -1,9 +1,9 @@
 /**
- * Entry point - redirects to main app
+ * Entry point - redirects to tabs
  */
 
 import { Redirect } from "expo-router";
 
 export default function Index() {
-  return <Redirect href="/home" />;
+  return <Redirect href="/(tabs)" />;
 }

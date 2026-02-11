@@ -2,7 +2,9 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -14,24 +16,43 @@
     "jsx": "react-native",
     "outDir": "./dist",
     "rootDir": ".",
-    "composite": true,
-    "types": ["jest", "react-native", "expo"],
+    "types": [
+      "jest",
+      "react-native",
+      "expo"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@/components/*": ["src/components/*"],
-      "@/screens/*": ["src/screens/*"],
-      "@/contexts/*": ["src/contexts/*"],
-      "@/utils/*": ["src/utils/*"],
-      "@/constants/*": ["src/constants/*"],
-      "@/contracts/*": ["src/contracts/*"]
+      "@/*": [
+        "src/*"
+      ],
+      "@/components/*": [
+        "src/components/*"
+      ],
+      "@/screens/*": [
+        "src/screens/*"
+      ],
+      "@/contexts/*": [
+        "src/contexts/*"
+      ],
+      "@/utils/*": [
+        "src/utils/*"
+      ],
+      "@/constants/*": [
+        "src/constants/*"
+      ],
+      "@/contracts/*": [
+        "src/contracts/*"
+      ]
     }
   },
   "include": [
     "src/**/*",
     "app/**/*",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
   ],
   "exclude": [
     "node_modules",

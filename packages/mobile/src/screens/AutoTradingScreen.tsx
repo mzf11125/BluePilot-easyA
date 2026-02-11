@@ -314,7 +314,7 @@ export const AutoTradingScreen: React.FC = () => {
             {/* Signal Types */}
             <Card variant="outlined" padding="md" style={styles.card}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>Signal Types</Text>
-              {([
+              {[
                 { type: "PRICE_SPIKE" as const, label: "Price Spike" },
                 { type: "VOLUME_SURGE" as const, label: "Volume Surge" },
                 { type: "LAUNCH_MOMENTUM" as const, label: "Launch Momentum" },

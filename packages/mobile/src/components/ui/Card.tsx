@@ -5,9 +5,10 @@
 import React, { forwardRef } from "react";
 import {
   View,
+  Text,
   StyleSheet,
   ViewStyle,
-  PressabilityProps,
+  TouchableOpacityProps,
   TouchableOpacity,
 } from "react-native";
 import { Colors, BorderRadius, Spacing, Shadow } from "@/constants";
@@ -15,7 +16,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 
 export type CardVariant = "elevated" | "outlined" | "flat";
 
-interface CardProps extends PressabilityProps {
+interface CardProps extends TouchableOpacityProps {
   children: React.ReactNode;
   variant?: CardVariant;
   padding?: keyof typeof Spacing.padding;

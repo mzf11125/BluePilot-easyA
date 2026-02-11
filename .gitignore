@@ -47,6 +47,9 @@ packages/mobile/eas-build-metadata.json
 packages/mobile/web-build/
 packages/mobile/.env.local
 
+# Monorepo symlink for expo-router
+^app/$
+
 # Android
 packages/mobile/android/app/build/
 packages/mobile/android/.gradle/

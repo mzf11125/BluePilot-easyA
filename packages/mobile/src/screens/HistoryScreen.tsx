@@ -87,11 +87,11 @@ export const HistoryScreen: React.FC = () => {
   const getStatusColor = (status: TradeEvent["status"]) => {
     switch (status) {
       case "confirmed":
-        return Colors.semantic.success;
+        return colors.success;
       case "pending":
-        return Colors.semantic.warning;
+        return colors.warning;
       case "failed":
-        return Colors.semantic.error;
+        return colors.error;
     }
   };
 

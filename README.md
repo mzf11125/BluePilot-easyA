@@ -1,6 +1,3 @@
-
-
-
 # BluePilot — Hands-Free DeFi Trading on Base
 
 [!IMPORTANT]

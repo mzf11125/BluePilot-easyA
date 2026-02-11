@@ -1,0 +1,71 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# Build outputs
+dist/
+build/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Hardhat / Solidity
+packages/contracts/artifacts/
+packages/contracts/cache/
+packages/contracts/typechain-types/
+packages/contracts/deployments/
+packages/contracts/.openzeppelin/
+packages/contracts/coverage/
+packages/contracts/coverage.json
+packages/contracts/*.covered.ts
+
+# TypeChain
+packages/*/typechain-types/
+
+# Expo / React Native
+packages/mobile/.expo/
+packages/mobile/dist/
+packages/mobile/.expo-shared/
+packages/mobile/eas-build-metadata.json
+packages/mobile/web-build/
+packages/mobile/.env.local
+
+# Android
+packages/mobile/android/app/build/
+packages/mobile/android/.gradle/
+packages/mobile/android/local.properties
+packages/mobile/*.iml
+
+# iOS
+packages/mobile/ios/Pods/
+packages/mobile/ios/build/
+packages/mobile/*.xcworkspace
+packages/mobile/.xcode.env.local
+
+# Test coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Misc
+.cache/
+.temp/
+tmp/
+*.tgz

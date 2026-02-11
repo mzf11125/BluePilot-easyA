@@ -1,0 +1,278 @@
+[
+  {
+    "inputs": [
+      {"internalType": "address", "name": "_router", "type": "address"},
+      {"internalType": "address", "name": "_weth", "type": "address"},
+      {"internalType": "address", "name": "_tradeExecutor", "type": "address"},
+      {"internalType": "address", "name": "_feeRecipient", "type": "address"},
+      {"internalType": "uint16", "name": "_protocolFeeBps", "type": "uint16"},
+      {"internalType": "address", "name": "_owner", "type": "address"}
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidTokenAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {"internalType": "uint256", "name": "available", "type": "uint256"},
+      {"internalType": "uint256", "name": "required", "type": "uint256"}
+    ],
+    "name": "InsufficientBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {"internalType": "uint256", "name": "available", "type": "uint256"},
+      {"internalType": "uint256", "name": "requested", "type": "uint256"}
+    ],
+    "name": "InsufficientVaultBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TradeExecutionFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {"internalType": "uint256", "name": "tradeSize", "type": "uint256"},
+      {"internalType": "uint256", "name": "balance", "type": "uint256"}
+    ],
+    "name": "TradeExceedsBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {"internalType": "address", "name": "caller", "type": "address"},
+      {"internalType": "address", "name": "expectedUser", "type": "address"}
+    ],
+    "name": "UnauthorizedCaller",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
+      {"indexed": true, "internalType": "address", "name": "token", "type": "address"},
+      {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
+    ],
+    "name": "Deposited",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {"indexed": true, "internalType": "address", "name": "token", "type": "address"},
+      {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
+    ],
+    "name": "FeesCollected",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
+      {"indexed": true, "internalType": "address", "name": "tokenIn", "type": "address"},
+      {"indexed": true, "internalType": "address", "name": "tokenOut", "type": "address"},
+      {"indexed": false, "internalType": "uint256", "name": "amountIn", "type": "uint256"},
+      {"indexed": false, "internalType": "uint256", "name": "amountOut", "type": "uint256"},
+      {"indexed": false, "internalType": "uint256", "name": "timestamp", "type": "uint256"}
+    ],
+    "name": "TradeExecuted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
+      {"indexed": true, "internalType": "address", "name": "token", "type": "address"},
+      {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
+    ],
+    "name": "Withdrawn",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "WETH",
+    "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "depositETH",
+    "outputs": [{"internalType": "uint256", "name": "amount", "type": "uint256"}],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"internalType": "address", "name": "token", "type": "address"},
+      {"internalType": "uint256", "name": "amount", "type": "uint256"}
+    ],
+    "name": "depositToken",
+    "outputs": [{"internalType": "uint256", "name": "depositedAmount", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"internalType": "address", "name": "tokenIn", "type": "address"},
+      {"internalType": "address", "name": "tokenOut", "type": "address"},
+      {"internalType": "uint256", "name": "amountIn", "type": "uint256"}
+    ],
+    "name": "simulateTrade",
+    "outputs": [{"internalType": "uint256", "name": "amountOut", "type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"internalType": "address", "name": "user", "type": "address"},
+      {"internalType": "uint16", "name": "maxSlippageBps", "type": "uint16"},
+      {"internalType": "uint256", "name": "maxTradeSize", "type": "uint256"},
+      {"internalType": "uint32", "name": "cooldownSeconds", "type": "uint32"},
+      {"internalType": "address[]", "name": "tokenAllowlist", "type": "address[]"}
+    ],
+    "name": "setPolicy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"internalType": "address", "name": "tokenIn", "type": "address"},
+      {"internalType": "address", "name": "tokenOut", "type": "address"},
+      {"internalType": "uint256", "name": "amountIn", "type": "uint256"},
+      {"internalType": "uint256", "name": "minAmountOut", "type": "uint256"}
+    ],
+    "name": "executeTrade",
+    "outputs": [{"internalType": "uint256", "name": "amountOut", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "address", "name": "user", "type": "address"}],
+    "name": "getPolicy",
+    "outputs": [
+      {"internalType": "uint16", "name": "maxSlippageBps", "type": "uint16"},
+      {"internalType": "uint256", "name": "maxTradeSize", "type": "uint256"},
+      {"internalType": "uint32", "name": "cooldownSeconds", "type": "uint32"},
+      {"internalType": "uint32", "name": "lastTradeTimestamp", "type": "uint32"},
+      {"internalType": "address[]", "name": "tokenAllowlist", "type": "address[]"}
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"internalType": "address", "name": "user", "type": "address"},
+      {"internalType": "address", "name": "token", "type": "address"}
+    ],
+    "name": "getVaultBalance",
+    "outputs": [{"internalType": "uint256", "name": "balance", "type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"internalType": "address", "name": "user", "type": "address"},
+      {"internalType": "address[]", "name": "tokens", "type": "address[]"}
+    ],
+    "name": "getVaultBalances",
+    "outputs": [{"internalType": "uint256[]", "name": "balances", "type": "uint256[]"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "uint256", "name": "amount", "type": "uint256"}],
+    "name": "withdrawETH",
+    "outputs": [{"internalType": "uint256", "name": "withdrawnAmount", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"internalType": "address", "name": "token", "type": "address"},
+      {"internalType": "uint256", "name": "amount", "type": "uint256"}
+    ],
+    "name": "withdrawToken",
+    "outputs": [{"internalType": "uint256", "name": "withdrawnAmount", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawAllETH",
+    "outputs": [{"internalType": "uint256", "name": "amount", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "address", "name": "token", "type": "address"}],
+    "name": "withdrawAllToken",
+    "outputs": [{"internalType": "uint256", "name": "amount", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "address", "name": "user", "type": "address"}],
+    "name": "initializeDefaultPolicy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeRecipient",
+    "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "protocolFeeBps",
+    "outputs": [{"internalType": "uint16", "name": "", "type": "uint16"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "router",
+    "outputs": [{"internalType": "contract IUniswapV2Router02", "name": "", "type": "address"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tradeExecutor",
+    "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+    "name": "totalDeposits",
+    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"internalType": "address", "name": "", "type": "address"},
+      {"internalType": "address", "name": "", "type": "address"}
+    ],
+    "name": "vaultBalances",
+    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
+  }
+]

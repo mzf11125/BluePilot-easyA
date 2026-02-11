@@ -1,0 +1,41 @@
+{
+  "package_name": "com.bluepilot.app",
+  "manifest": {
+    "name": "BluePilot",
+    "short_name": "BluePilot",
+    "description": "AI-powered DeFi trading copilot on Base L2",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0A0F1C",
+    "theme_color": "#3B82F6",
+    "orientation": "portrait",
+    "icons": [
+      {
+        "src": "https://bluepilot.app/icons/icon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "https://bluepilot.app/icons/icon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "src": "https://bluepilot.app/icons/maskable-icon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "maskable"
+      }
+    ]
+  },
+  "features": {
+    "orientation": "portrait",
+    "fullscreen": false
+  },
+  "url_handlers": [
+    {
+      "origin": "https://bluepilot.app",
+      "name": "Default URL"
+    }
+  ]
+}

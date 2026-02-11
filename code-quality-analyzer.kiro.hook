@@ -1,0 +1,23 @@
+{
+  "enabled": true,
+  "name": "Code Quality Analyzer",
+  "description": "Analyzes modified source code for potential improvements including code smells, design patterns, best practices, readability, maintainability, and performance optimizations",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.ts",
+      "*.tsx",
+      "*.sol",
+      "*.js",
+      "*.jsx",
+      ".sol"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the recently edited file for code quality improvements. Focus on:\n1. Code smells and anti-patterns\n2. Applicable design patterns that could improve the structure\n3. Best practices specific to the language/framework being used\n4. Readability improvements (naming, structure, comments)\n5. Maintainability concerns (complexity, coupling, testability)\n6. Performance optimizations (gas optimization for Solidity, runtime efficiency for TypeScript/JavaScript)\n\nProvide specific, actionable suggestions while maintaining existing functionality. Be concise and prioritize the most impactful improvements."
+  },
+  "workspaceFolderName": "ConsensusHK26",
+  "shortName": "code-quality-analyzer"
+}

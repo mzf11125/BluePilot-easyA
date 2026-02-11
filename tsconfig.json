@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "composite": true,
+    "references": [
+      { "path": "./packages/contracts" },
+      { "path": "./packages/agent" },
+      { "path": "./packages/mobile" }
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "packages/*/dist",
+    "packages/*/build",
+    "packages/mobile/node_modules",
+    "packages/*/artifacts",
+    "packages/*/cache",
+    "packages/*/typechain-types"
+  ]
+}

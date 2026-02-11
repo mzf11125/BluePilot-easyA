@@ -1,0 +1,49 @@
+{
+  "name": "bluepilot-easya",
+  "version": "1.0.0",
+  "description": "Percolator DeFi Trading Copilot on Base L2",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "clean": "rm -rf node_modules packages/*/node_modules",
+    "install:all": "npm install && npm run install:contracts && npm run install:agent && npm run install:mobile",
+    "install:contracts": "cd packages/contracts && npm install",
+    "install:agent": "cd packages/agent && npm install",
+    "install:mobile": "cd packages/mobile && npm install",
+    "compile:contracts": "cd packages/contracts && npx hardhat compile",
+    "test:contracts": "cd packages/contracts && npx hardhat test",
+    "test:agent": "cd packages/agent && npm test",
+    "test:mobile": "cd packages/mobile && npm test",
+    "test": "npm run test:contracts && npm run test:agent && npm run test:mobile",
+    "dev:agent": "cd packages/agent && npm run dev",
+    "dev:mobile": "cd packages/mobile && npx expo start",
+    "deploy:contracts": "cd packages/contracts && npx hardhat run scripts/deploy.ts --network base",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write \"**/*.{ts,tsx,sol,md,json}\""
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "prettier": "^3.1.0",
+    "prettier-plugin-solidity": "^1.2.0",
+    "typescript": "^5.3.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": [
+    "defi",
+    "base",
+    "trading",
+    "copilot",
+    "uniswap",
+    "vault"
+  ],
+  "author": "BluePilot Team",
+  "license": "MIT"
+}

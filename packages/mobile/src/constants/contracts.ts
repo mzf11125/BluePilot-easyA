@@ -71,14 +71,39 @@ export const TOKEN_METADATA: Record<string, { symbol: string; name: string; deci
   DAI: { symbol: "DAI", name: "Dai Stablecoin", decimals: 18, color: "#F4B731" },
 };
 
-// Uniswap V2 Router address on Base
+// DEX Router addresses
 export const UNISWAP_V2_ROUTER = "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24";
+
+// RobinPump Router addresses (will be updated after deployment)
+export const ROBINPUMP_ROUTER = process.env.EXPO_PUBLIC_ROBINPUMP_ROUTER || "0x0000000000000000000000000000000000000000";
+export const ROBINPUMP_FACTORY = process.env.EXPO_PUBLIC_ROBINPUMP_FACTORY || "0x0000000000000000000000000000000000000000";
+
+// DEX preference options
+export const DEX_PREFERENCES = {
+  AUTO: "auto",
+  UNISWAP_V2: "uniswap_v2",
+  ROBINPUMP: "robinpump",
+} as const;
+
+// Token risk levels
+export const RISK_THRESHOLDS = {
+  LOW: 30,      // Score 0-30
+  MEDIUM: 60,   // Score 31-60
+  HIGH: 100,    // Score 61-100
+} as const;
+
+// Default trading settings for new tokens
+export const NEW_TOKEN_DEFAULTS = {
+  MAX_TRADE_SIZE: "0.5", // 0.5 ETH max for new/unverified tokens
+  LIQUIDITY_THRESHOLD: "10", // 10 ETH minimum liquidity threshold
+} as const;
 
 // Gas settings
 export const GAS_SETTINGS = {
   maxPriorityFeePerGas: "1000000000", // 1 gwei
   maxFeePerGas: "50000000000", // 50 gwei
   gasLimit: "800000",
+  robinPumpGasLimit: "300000", // RobinPump trades use more gas
 } as const;
 
 // Transaction deadlines

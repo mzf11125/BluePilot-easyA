@@ -10,7 +10,9 @@ import { Text, View } from "react-native";
 // Import screens
 import { HomeScreen } from "@/screens/HomeScreen";
 import { TradeScreen } from "@/screens/TradeScreen";
-import { PolicyScreen } from "@/screens/PolicyScreen";
+import { LaunchesScreen } from "@/screens/LaunchesScreen";
+import { AutoTradingScreen } from "@/screens/AutoTradingScreen";
+import { SocialTradingScreen } from "@/screens/SocialTradingScreen";
 import { HistoryScreen } from "@/screens/HistoryScreen";
 
 const Tab = createBottomTabNavigator();
@@ -37,9 +39,25 @@ const TradeIcon: React.FC<TabIconProps> = ({ focused, color, size }) => (
   </svg>
 );
 
-const PolicyIcon: React.FC<TabIconProps> = ({ focused, color, size }) => (
+const LaunchesIcon: React.FC<TabIconProps> = ({ focused, color, size }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+  </svg>
+);
+
+const AutoIcon: React.FC<TabIconProps> = ({ focused, color, size }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 6v6l4 2" />
+    <path d="M12 18h.01" />
+  </svg>
+);
+
+const SocialIcon: React.FC<TabIconProps> = ({ focused, color, size }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
   </svg>
 );
 
@@ -68,7 +86,7 @@ export const BottomTabNavigator: React.FC = () => {
         },
         tabBarLabelStyle: {
           fontFamily: "Inter-Medium",
-          fontSize: 12,
+          fontSize: 11,
         },
       }}
     >
@@ -89,11 +107,27 @@ export const BottomTabNavigator: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name="Policy"
-        component={PolicyScreen}
+        name="Launches"
+        component={LaunchesScreen}
         options={{
-          tabBarLabel: "Policy",
-          tabBarIcon: ({ color, size }) => <PolicyIcon color={color} size={size} focused />,
+          tabBarLabel: "Launches",
+          tabBarIcon: ({ color, size }) => <LaunchesIcon color={color} size={size} focused />,
+        }}
+      />
+      <Tab.Screen
+        name="Auto"
+        component={AutoTradingScreen}
+        options={{
+          tabBarLabel: "Auto",
+          tabBarIcon: ({ color, size }) => <AutoIcon color={color} size={size} focused />,
+        }}
+      />
+      <Tab.Screen
+        name="Social"
+        component={SocialTradingScreen}
+        options={{
+          tabBarLabel: "Social",
+          tabBarIcon: ({ color, size }) => <SocialIcon color={color} size={size} focused />,
         }}
       />
       <Tab.Screen

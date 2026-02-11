@@ -1,64 +1,57 @@
+
 # Design Document: Percolator DeFi Trading Copilot
 
 ## Overview
 
-Percolator is a mobile-first DeFi trading copilot that combines three key components:
+Percolator is a mobile-first DeFi trading copilot with three core components:
 
-1. **Smart Contracts on Base L2**: Three modular Solidity contracts (VaultRouter, TradeExecutor, PolicyGuard) that manage funds, execute trades via Uniswap V2, and enforce user-defined risk policies
-2. **OpenClaw Agent**: Natural language interface using Gateway Protocol to parse trading intents, simulate outcomes, and generate unsigned transactions
-3. **React Native Mobile App**: Cross-platform mobile interface with wallet integration, trade execution, policy management, and transaction history
+1. **Smart Contracts (Base L2):** VaultRouter, TradeExecutor, PolicyGuard for funds, trades, and risk enforcement
+2. **OpenClaw Agent:** Conversational AI using Gateway Protocol for intent parsing and transaction generation
+3. **React Native Mobile App:** Wallet integration, trade execution, policy management, and history
 
-The architecture prioritizes security (user-controlled signing, on-chain policy enforcement), gas efficiency (optimized Solidity patterns), and user experience (mobile-first design, conversational interface).
+The system is designed for security (user-controlled signing, on-chain policy enforcement), gas efficiency, and a mobile-first, accessible user experience.
 
-## Architecture
-
-### System Architecture
+## System Architecture
 
 ```mermaid
 graph TB
-    User[User Mobile Device]
-    
-    subgraph "Frontend Layer"
-        RN[React Native App<br/>Expo + TWA]
-        WC[Wallet Connect /<br/>Coinbase Wallet SDK]
-    end
-    
-    subgraph "Agent Layer"
-        OC[OpenClaw Agent<br/>Gateway Protocol]
-        API[Agent API<br/>Intent Parser]
-    end
-    
-    subgraph "Blockchain Layer - Base L2"
-        VR[VaultRouter.sol<br/>Deposits/Withdrawals/Policy]
-        TE[TradeExecutor.sol<br/>DEX Integration]
-        PG[PolicyGuard.sol<br/>Risk Validation]
-        UV2[Uniswap V2 Router<br/>0x4752ba...]
-    end
-    
-    subgraph "External Services"
-        RPC[Base RPC<br/>mainnet.base.org]
-        BS[Basescan<br/>Block Explorer]
-    end
-    
-    User -->|Interact| RN
-    RN -->|Connect Wallet| WC
-    RN -->|Chat Commands| OC
-    RN -->|Direct Calls| VR
-    
-    OC -->|Parse Intent| API
-    API -->|Read State| VR
-    API -->|Generate TX| TE
-    
-    WC -->|Sign TX| User
-    RN -->|Submit TX| RPC
-    
-    VR -->|Validate Policy| PG
-    VR -->|Execute Trade| TE
-    TE -->|Swap Tokens| UV2
-    
-    RPC -->|Broadcast| VR
-    RPC -->|Query Events| RN
-    BS -->|View TX| User
+  User[User Mobile Device]
+  subgraph "Frontend Layer"
+    RN[React Native App\nExpo + TWA]
+    WC[WalletConnect /\nCoinbase Wallet SDK]
+  end
+  subgraph "Agent Layer"
+    OC[OpenClaw Agent\nGateway Protocol]
+    API[Agent API\nIntent Parser]
+  end
+  subgraph "Blockchain Layer - Base L2"
+    VR[VaultRouter.sol\nDeposits/Withdrawals/Policy]
+    TE[TradeExecutor.sol\nDEX Integration]
+    PG[PolicyGuard.sol\nRisk Validation]
+    UV2[Uniswap V2 Router\n0x4752ba...]
+  end
+  subgraph "External Services"
+    RPC[Base RPC\nmainnet.base.org]
+    BS[Basescan\nBlock Explorer]
+  end
+  User -->|Interact| RN
+  RN -->|Connect Wallet| WC
+  RN -->|Chat Commands| OC
+  RN -->|Direct Calls| VR
+  OC -->|Parse Intent| API
+  API -->|Read State| VR
+  API -->|Generate TX| TE
+  WC -->|Sign TX| User
+  RN -->|Submit TX| RPC
+  VR -->|Validate Policy| PG
+  VR -->|Execute Trade| TE
+  TE -->|Swap Tokens| UV2
+  RPC -->|Broadcast| VR
+  RPC -->|Query Events| RN
+```
+
+---
+All diagrams include alt text and clear headings for accessibility. See [requirements.md](requirements.md) for detailed user stories and acceptance criteria.
 ```
 
 ### Component Interaction Flow

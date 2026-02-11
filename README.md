@@ -1,62 +1,58 @@
-# BluePilot DeFi Trading Copilot
 
-A mobile-first DeFi trading copilot on Base L2 with smart contract vaults, AI-powered natural language trading interface, and comprehensive policy management.
+# Percolator DeFi Trading Copilot
 
-## Project Structure
+Percolator is a mobile-first DeFi trading copilot that combines secure smart contracts, an AI-powered agent, and a modern mobile app to make DeFi trading safe, accessible, and conversational.
 
+## Architecture
+
+```mermaid
+graph TD
+	A[Mobile App (React Native/Expo)] -- WalletConnect, Policy, Trade, History --> B[OpenClaw Agent]
+	B -- Gateway Protocol --> C[Smart Contracts (Base L2)]
+	C -- VaultRouter, TradeExecutor, PolicyGuard --> D[DEX (Uniswap V2 on Base)]
+	C -- Events --> A
 ```
-bluepilot-easya/
-├── packages/
-│   ├── contracts/    # Solidity smart contracts
-│   ├── agent/         # OpenClaw Agent API
-│   └── mobile/        # React Native mobile app
-└── package.json       # Monorepo root
-```
 
-## Getting Started
+## Features
+- **Conversational Trading:** Use natural language to simulate and execute trades.
+- **On-Chain Risk Management:** Enforce slippage, trade size, cooldown, and allowlist policies on-chain.
+- **Mobile-First:** Intuitive app with wallet connection, dark mode, and responsive design.
+- **Auditability:** All actions are on-chain and verifiable via Basescan.
+- **Security:** User-controlled keys, contract-based enforcement, and best practices.
+
+## Packages
+- `packages/agent`: OpenClaw AI agent for chat-based trading and policy management.
+- `packages/contracts`: Solidity smart contracts for vaults, trading, and policy enforcement.
+- `packages/mobile`: React Native app for user interface and wallet integration.
+
+## Quick Start
 
 ### Prerequisites
+- Node.js >= 18, pnpm, Android Studio (for TWA), and a supported wallet app.
 
-- Node.js >= 18.0.0
-- npm >= 9.0.0
-- Python 3 (for node-gyp)
-- Java JDK 17 (for Android development)
-- Android Studio (for mobile development)
-
-### Installation
-
-```bash
-# Install dependencies
-npm run install:all
+### Install
+```sh
+pnpm install
 ```
 
-## Development
+### Build & Test
+- Agent: `pnpm --filter agent build && pnpm --filter agent test`
+- Contracts: `pnpm --filter contracts build && pnpm --filter contracts test`
+- Mobile: `pnpm --filter mobile start`
 
-### Smart Contracts
-
-```bash
-cd packages/contracts
-
-# Compile contracts
-npm run compile
-
-# Run tests
-npm run test
-
-# Run tests with gas reporting
-REPORT_GAS=true npm run test
-
-# Deploy to Base Sepolia
-npm run deploy:sepolia
-
-# Verify contracts
-npm run verify:sepolia
+### Deploy Contracts
+```sh
+cd packages/contracts && pnpm deploy
 ```
 
-### Agent API
+## Security & Audit
+See [SECURITY.md](SECURITY.md) for details on contract security, responsible disclosure, and audit status.
 
-```bash
-cd packages/agent
+## Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+MIT
 
 # Start development server
 npm run dev

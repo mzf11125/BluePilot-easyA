@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {IUniswapV2Router02} from "./interfaces/IUniswapV2Router.sol";
+import {IUniswapV2Router02} from "./interfaces/IUniswapV2Router02.sol";
 import {IRRobinPumpRouter} from "./interfaces/IRRobinPumpRouter.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
@@ -204,7 +204,7 @@ contract TradeExecutor is Ownable, ReentrancyGuard {
         IERC20(tokenIn).safeTransferFrom(msg.sender, address(this), amountIn);
 
         // Approve router
-        IERC20(tokenIn).safeApprove(address(uniswapRouter), amountIn);
+        IERC20(tokenIn).forceApprove(address(uniswapRouter), amountIn);
 
         address[] memory path = new address[](2);
         path[0] = tokenIn;
@@ -212,17 +212,17 @@ contract TradeExecutor is Ownable, ReentrancyGuard {
 
         uint256 deadline = block.timestamp + deadlineBuffer;
 
-        try router.swapExactTokensForETH(amountIn, minAmountOut, path, msg.sender, deadline) returns (
+        try uniswapRouter.swapExactTokensForETH(amountIn, minAmountOut, path, msg.sender, deadline) returns (
             uint256[] memory amounts
         ) {
             amountOut = amounts[amounts.length - 1];
             emit TradeExecuted(msg.sender, tokenIn, WETH, amountIn, amountOut, block.timestamp);
 
             // Reset approval
-            IERC20(tokenIn).safeApprove(address(router), 0);
+            IERC20(tokenIn).forceApprove(address(uniswapRouter), 0);
             return amountOut;
         } catch {
-            IERC20(tokenIn).safeApprove(address(router), 0);
+            IERC20(tokenIn).forceApprove(address(uniswapRouter), 0);
             revert TradeFailed();
         }
     }
@@ -247,7 +247,7 @@ contract TradeExecutor is Ownable, ReentrancyGuard {
         IERC20(tokenIn).safeTransferFrom(msg.sender, address(this), amountIn);
 
         // Approve router
-        IERC20(tokenIn).safeApprove(address(uniswapRouter), amountIn);
+        IERC20(tokenIn).forceApprove(address(uniswapRouter), amountIn);
 
         address[] memory path = new address[](2);
         path[0] = tokenIn;
@@ -255,7 +255,7 @@ contract TradeExecutor is Ownable, ReentrancyGuard {
 
         uint256 deadline = block.timestamp + deadlineBuffer;
 
-        try router.swapExactTokensForTokens(
+        try uniswapRouter.swapExactTokensForTokens(
             amountIn,
             minAmountOut,
             path,
@@ -266,10 +266,10 @@ contract TradeExecutor is Ownable, ReentrancyGuard {
             emit TradeExecuted(msg.sender, tokenIn, tokenOut, amountIn, amountOut, block.timestamp);
 
             // Reset approval
-            IERC20(tokenIn).safeApprove(address(router), 0);
+            IERC20(tokenIn).forceApprove(address(uniswapRouter), 0);
             return amountOut;
         } catch {
-            IERC20(tokenIn).safeApprove(address(router), 0);
+            IERC20(tokenIn).forceApprove(address(uniswapRouter), 0);
             revert TradeFailed();
         }
     }
@@ -322,11 +322,11 @@ contract TradeExecutor is Ownable, ReentrancyGuard {
         IERC20(tokenIn).safeTransferFrom(msg.sender, address(this), amountIn);
 
         // Approve router
-        IERC20(tokenIn).safeApprove(address(uniswapRouter), amountIn);
+        IERC20(tokenIn).forceApprove(address(uniswapRouter), amountIn);
 
         uint256 deadline = block.timestamp + deadlineBuffer;
 
-        try router.swapExactTokensForTokens(
+        try uniswapRouter.swapExactTokensForTokens(
             amountIn,
             minAmountOut,
             path,
@@ -337,10 +337,10 @@ contract TradeExecutor is Ownable, ReentrancyGuard {
             emit TradeExecuted(msg.sender, tokenIn, path[path.length - 1], amountIn, amountOut, block.timestamp);
 
             // Reset approval
-            IERC20(tokenIn).safeApprove(address(router), 0);
+            IERC20(tokenIn).forceApprove(address(uniswapRouter), 0);
             return amountOut;
         } catch {
-            IERC20(tokenIn).safeApprove(address(router), 0);
+            IERC20(tokenIn).forceApprove(address(uniswapRouter), 0);
             revert TradeFailed();
         }
     }
@@ -358,7 +358,7 @@ contract TradeExecutor is Ownable, ReentrancyGuard {
         view
         returns (uint256 amountOut)
     {
-        uint256[] memory amounts = router.getAmountsOut(amountIn, path);
+        uint256[] memory amounts = uniswapRouter.getAmountsOut(amountIn, path);
         return amounts[amounts.length - 1];
     }
 
@@ -378,13 +378,228 @@ contract TradeExecutor is Ownable, ReentrancyGuard {
         path[0] = tokenIn;
         path[1] = tokenOut;
 
-        uint256[] memory amounts = router.getAmountsOut(amountIn, path);
+        uint256[] memory amounts = uniswapRouter.getAmountsOut(amountIn, path);
         return amounts[1];
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        ROBINPUMP FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+
+    /// @notice Buys tokens on RobinPump bonding curve
+    /// @param token The token address to buy
+    /// @param minAmountOut Minimum tokens to receive
+    /// @return amountOut Actual amount of tokens received
+    function buyRobinPump(
+        address token,
+        uint256 minAmountOut
+    ) external payable nonReentrant returns (uint256 amountOut) {
+        if (msg.value == 0) revert AmountBelowMinimum(0, minTradeAmount);
+        if (msg.value < minTradeAmount) revert AmountBelowMinimum(msg.value, minTradeAmount);
+        if (address(robinPumpRouter) == address(0)) revert TradeFailed();
+
+        // Check if token is a RobinPump token
+        try robinPumpRouter.isRobinPumpToken(token) returns (bool isRP) {
+            if (!isRP) revert TradeFailed();
+        } catch {
+            revert TradeFailed();
+        }
+
+        // Execute buy through RobinPump
+        try robinPumpRouter.buy{value: msg.value}(token, minAmountOut) returns (uint256 tokens) {
+            amountOut = tokens;
+
+            // Transfer tokens to caller
+            IERC20(token).safeTransfer(msg.sender, amountOut);
+
+            emit DexRouted(
+                msg.sender,
+                DexRouter.ROBINPUMP,
+                WETH,
+                token,
+                msg.value,
+                amountOut
+            );
+            emit TradeExecuted(msg.sender, WETH, token, msg.value, amountOut, block.timestamp);
+
+            return amountOut;
+        } catch {
+            revert TradeFailed();
+        }
+    }
+
+    /// @notice Sells tokens on RobinPump bonding curve
+    /// @param token The token address to sell
+    /// @param tokenAmount Amount of tokens to sell
+    /// @param minAmountOut Minimum ETH to receive
+    /// @return amountOut Actual amount of ETH received
+    function sellRobinPump(
+        address token,
+        uint256 tokenAmount,
+        uint256 minAmountOut
+    ) external nonReentrant returns (uint256 amountOut) {
+        if (tokenAmount < minTradeAmount) revert AmountBelowMinimum(tokenAmount, minTradeAmount);
+        if (address(robinPumpRouter) == address(0)) revert TradeFailed();
+
+        // Transfer tokens from caller
+        IERC20(token).safeTransferFrom(msg.sender, address(this), tokenAmount);
+
+        // Approve RobinPump router
+        IERC20(token).forceApprove(address(robinPumpRouter), tokenAmount);
+
+        // Execute sell through RobinPump
+        try robinPumpRouter.sell(token, tokenAmount, minAmountOut) returns (uint256 ethAmount) {
+            amountOut = ethAmount;
+
+            // Reset approval
+            IERC20(token).forceApprove(address(robinPumpRouter), 0);
+
+            // Transfer ETH to caller
+            (bool success, ) = msg.sender.call{value: amountOut}("");
+            if (!success) revert TokenTransferFailed();
+
+            emit DexRouted(
+                msg.sender,
+                DexRouter.ROBINPUMP,
+                token,
+                WETH,
+                tokenAmount,
+                amountOut
+            );
+            emit TradeExecuted(msg.sender, token, WETH, tokenAmount, amountOut, block.timestamp);
+
+            return amountOut;
+        } catch {
+            IERC20(token).forceApprove(address(robinPumpRouter), 0);
+            revert TradeFailed();
+        }
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        DEX ROUTING FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+
+    /// @notice Selects the best DEX router for a trade based on token maturity
+    /// @param tokenIn Input token address
+    /// @param tokenOut Output token address
+    /// @param amountIn Amount of input tokens
+    /// @return router The selected DEX router
+    /// @return amountOut Expected output amount
+    function selectBestRouter(
+        address tokenIn,
+        address tokenOut,
+        uint256 amountIn
+    ) external view returns (DexRouter router, uint256 amountOut) {
+        // Check if either token is a RobinPump token
+        bool isRobinPumpIn = _isRobinPumpToken(tokenIn);
+        bool isRobinPumpOut = _isRobinPumpToken(tokenOut);
+
+        // If both tokens are RobinPump tokens, use RobinPump
+        if (isRobinPumpIn && isRobinPumpOut) {
+            return (DexRouter.ROBINPUMP, _getRobinPumpPrice(tokenIn, tokenOut, amountIn));
+        }
+
+        // If one is RobinPump and we're buying/selling the new token
+        if ((tokenIn == WETH && isRobinPumpOut) || (isRobinPumpIn && tokenOut == WETH)) {
+            return (DexRouter.ROBINPUMP, _getRobinPumpPrice(tokenIn, tokenOut, amountIn));
+        }
+
+        // Otherwise use Uniswap V2
+        address[] memory path = new address[](2);
+        path[0] = tokenIn;
+        path[1] = tokenOut;
+
+        uint256 uniswapOut;
+        try uniswapRouter.getAmountsOut(amountIn, path) returns (uint256[] memory amounts) {
+            uniswapOut = amounts[amounts.length - 1];
+        } catch {
+            uniswapOut = 0;
+        }
+
+        return (DexRouter.UNISWAP_V2, uniswapOut);
+    }
+
+    /// @notice Check if a token is a RobinPump token
+    /// @param token The token address to check
+    /// @return isToken True if the token is on RobinPump
+    function isRobinPumpToken(address token) external view returns (bool isToken) {
+        return _isRobinPumpToken(token);
+    }
+
+    /// @notice Get price quote from RobinPump
+    /// @param tokenIn Input token address
+    /// @param tokenOut Output token address
+    /// @param amountIn Input amount
+    /// @return amountOut Expected output amount
+    function getRobinPumpPrice(
+        address tokenIn,
+        address tokenOut,
+        uint256 amountIn
+    ) external view returns (uint256 amountOut) {
+        return _getRobinPumpPrice(tokenIn, tokenOut, amountIn);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        INTERNAL FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+
+    /// @notice Internal function to check if token is RobinPump token
+    function _isRobinPumpToken(address token) internal view returns (bool) {
+        if (address(robinPumpRouter) == address(0)) return false;
+        try robinPumpRouter.isRobinPumpToken(token) returns (bool isRP) {
+            return isRP;
+        } catch {
+            return false;
+        }
+    }
+
+    /// @notice Internal function to get RobinPump price
+    function _getRobinPumpPrice(
+        address tokenIn,
+        address tokenOut,
+        uint256 amountIn
+    ) internal view returns (uint256) {
+        if (address(robinPumpRouter) == address(0)) return 0;
+
+        // If buying token with ETH
+        if (tokenIn == WETH) {
+            try robinPumpRouter.getBuyPrice(tokenOut, amountIn) returns (uint256 tokenAmount) {
+                return tokenAmount;
+            } catch {
+                return 0;
+            }
+        }
+
+        // If selling token for ETH
+        if (tokenOut == WETH) {
+            try robinPumpRouter.getSellPrice(tokenIn, amountIn) returns (uint256 ethAmount) {
+                return ethAmount;
+            } catch {
+                return 0;
+            }
+        }
+
+        return 0;
     }
 
     /*//////////////////////////////////////////////////////////////
                         ADMIN FUNCTIONS
     //////////////////////////////////////////////////////////////*/
+
+    /// @notice Sets the RobinPump router address
+    /// @param _robinPumpRouter New RobinPump router address
+    function setRobinPumpRouter(address _robinPumpRouter) external onlyOwner {
+        address oldRouter = address(robinPumpRouter);
+        robinPumpRouter = IRRobinPumpRouter(_robinPumpRouter);
+        emit RobinPumpRouterUpdated(oldRouter, _robinPumpRouter);
+    }
+
+    /// @notice Sets a token as verified (for maturity scoring)
+    /// @param token The token address
+    /// @param verified Whether the token is verified
+    function setVerifiedToken(address token, bool verified) external onlyOwner {
+        isVerifiedToken[token] = verified;
+    }
 
     /// @notice Sets the deadline buffer for trades
     /// @param _deadlineBuffer New deadline buffer in seconds

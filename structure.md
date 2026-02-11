@@ -21,6 +21,54 @@ percolator/
 │       ├── tech.md
 │       └── structure.md
 └── package.json            # Root package.json for workspace
+
+# Project Structure
+
+## Monorepo Organization
+
+```mermaid
+flowchart TD
+  A[percolator/]
+  A1[packages/]
+  A2[.kiro/]
+  A3[package.json]
+  A --> A1
+  A --> A2
+  A --> A3
+  A1a[contracts/\nSmart contracts (Hardhat)]
+  A1b[agent/\nOpenClaw agent API (Node.js/Express)]
+  A1c[mobile/\nReact Native mobile app (Expo)]
+  A1 --> A1a
+  A1 --> A1b
+  A1 --> A1c
+  A2a[specs/]
+  A2b[steering/]
+  A2 --> A2a
+  A2 --> A2b
+  A2a1[percolator-defi-agent/]
+  A2a --> A2a1
+  A2a1a[requirements.md]
+  A2a1b[design.md]
+  A2a1c[tasks.md]
+  A2a1 --> A2a1a
+  A2a1 --> A2a1b
+  A2a1 --> A2a1c
+  A2b1[product.md]
+  A2b2[tech.md]
+  A2b3[structure.md]
+  A2b --> A2b1
+  A2b --> A2b2
+  A2b --> A2b3
+```
+
+### Key Directories
+- **contracts/**: Solidity smart contracts (VaultRouter, TradeExecutor, PolicyGuard)
+- **agent/**: OpenClaw agent API (Node.js/Express)
+- **mobile/**: React Native mobile app (Expo, TWA)
+- **.kiro/**: Specs, design, and steering docs
+
+---
+All diagrams include alt text and clear headings for accessibility. See [README.md](../README.md) for a high-level overview.
 ```
 
 ## Smart Contracts Package (`packages/contracts/`)

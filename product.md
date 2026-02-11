@@ -1,30 +1,34 @@
-# Product Overview
 
-Percolator is a mobile-first DeFi trading copilot that enables secure, policy-controlled token trading on Base L2. The system combines smart contracts, an AI agent interface, and a React Native mobile app to provide conversational trading with on-chain risk management.
+# Product Pitch: Percolator DeFi Trading Copilot
 
-## Core Value Proposition
+Percolator is a mobile-first DeFi trading copilot for Base L2, enabling secure, policy-driven token trading through a conversational AI agent and a modern mobile app. Users can trade, manage risk, and track their portfolio—all with on-chain enforcement and full control of their funds.
 
-Users can execute DeFi trades through natural language commands while maintaining full control over their funds and risk parameters. All trades are validated against user-defined policies (max slippage, trade size limits, cooldown periods, token allowlists) enforced at the smart contract level.
+## Who is it for?
+- DeFi traders seeking more control and safety
+- Users who prefer mobile-first, intuitive interfaces
+- Anyone wanting to automate and safeguard trading with customizable, enforceable policies
 
-## Key Components
+## Why Percolator?
+- **Conversational Trading:** Trade using natural language via the OpenClaw agent
+- **On-Chain Risk Management:** Policies enforced by smart contracts, not just the frontend
+- **User-Centric Security:** You control your funds and keys; agent never accesses your wallet
+- **Mobile-First Experience:** React Native app with wallet integration, real-time tracking, and TWA installability
+- **Transparency:** All actions are on-chain and verifiable
 
-1. **Smart Contracts (Base L2)**: Three modular Solidity contracts manage vault deposits/withdrawals, execute DEX trades via Uniswap V2, and enforce risk policies on-chain
-2. **OpenClaw Agent**: Natural language interface using Gateway Protocol to parse trading intents, simulate outcomes, and generate unsigned transactions
-3. **Mobile App**: React Native + Expo cross-platform app with wallet integration, trade execution, policy management, and transaction history
+## Architecture
+```mermaid
+graph TD
+	A[Mobile App] -- WalletConnect, Policy, Trade, History --> B[OpenClaw Agent]
+	B -- Gateway Protocol --> C[Smart Contracts (Base L2)]
+	C -- VaultRouter, TradeExecutor, PolicyGuard --> D[DEX (Uniswap V2 on Base)]
+	C -- Events --> A
+```
 
-## User Experience
+## Differentiators
+- Natural language trading and simulation
+- On-chain, user-defined risk policies
+- Full auditability and transparency
+- Mobile-first, installable as native Android app (TWA)
 
-- Deposit funds into secure on-chain vault
-- Configure personal risk policies (slippage tolerance, trade size limits, cooldown periods, allowed tokens)
-- Execute trades via mobile UI or conversational commands
-- Simulate trades before execution to preview outcomes and verify policy compliance
-- View transaction history with blockchain verification links
-- Install as native Android app via Trusted Web Activity (TWA)
-
-## Security Model
-
-- Users maintain full custody of funds and private keys
-- All transactions require user signing via WalletConnect or Coinbase Wallet
-- Risk policies are enforced on-chain, not just in the UI
-- Agent never accesses or stores private keys
-- Smart contracts follow OpenZeppelin security patterns (ReentrancyGuard, SafeERC20, Ownable)
+---
+For more, see [requirements.md](requirements.md), [design.md](design.md), and [structure.md](structure.md).

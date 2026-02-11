@@ -1,63 +1,63 @@
+
 # Technology Stack
 
 ## Smart Contracts
 
-- **Language**: Solidity 0.8.x
-- **Framework**: Hardhat with TypeScript
-- **Libraries**: OpenZeppelin (ReentrancyGuard, Ownable, SafeERC20)
-- **Network**: Base L2 (Chain ID: 8453 mainnet, 84532 testnet)
-- **DEX Integration**: Uniswap V2 Router (0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24)
-- **Testing**: Hardhat + ethers.js + fast-check (property-based testing)
+- **Language:** Solidity 0.8.x
+- **Framework:** Hardhat + TypeScript
+- **Libraries:** OpenZeppelin (ReentrancyGuard, Ownable, SafeERC20)
+- **Network:** Base L2 (Mainnet 8453, Sepolia 84532)
+- **DEX:** Uniswap V2 Router (0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24)
+- **Testing:** Hardhat, ethers.js, fast-check
 
-### Contract Architecture
-
-Three modular contracts:
-- `VaultRouter.sol`: Vault management, policy configuration, trade orchestration
-- `TradeExecutor.sol`: DEX integration and token swaps
-- `PolicyGuard.sol`: Risk policy validation
+### Example: Contract Import
+```solidity
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./PolicyGuard.sol";
+```
 
 ## OpenClaw Agent
 
-- **Runtime**: Node.js with Express
-- **Language**: TypeScript
-- **Web3 Library**: ethers.js v6
-- **Protocol**: Gateway Protocol for secure agent-user interaction
-- **Testing**: Jest + fast-check
+- **Runtime:** Node.js (Express)
+- **Language:** TypeScript
+- **Web3:** ethers.js v6
+- **Protocol:** Gateway Protocol
+- **Testing:** Jest, fast-check
 
-### Agent API Endpoints
-
-- `POST /api/agent/simulate`: Parse intent and simulate trade
-- `POST /api/agent/execute`: Generate unsigned transaction
-- `GET /api/agent/policy`: Fetch or update user policy
-- `GET /api/agent/history`: Query transaction history from events
+### Example: API Endpoint
+```ts
+// POST /api/agent/simulate
+app.post('/api/agent/simulate', async (req, res) => { /* ... */ });
+```
 
 ## Mobile Application
 
-- **Framework**: React Native 0.73+ with Expo SDK 50+
-- **Language**: TypeScript
-- **Web3**: ethers.js v6 or viem
-- **Wallet Integration**: WalletConnect v2 + Coinbase Wallet SDK
-- **State Management**: React Context API + AsyncStorage
-- **Navigation**: React Navigation v6 (Bottom Tabs)
-- **Testing**: Jest + React Native Testing Library + fast-check
+- **Framework:** React Native 0.73+ (Expo SDK 50+)
+- **Language:** TypeScript
+- **Wallets:** WalletConnect v2, Coinbase Wallet SDK
+- **State:** React Context API, AsyncStorage
+- **Navigation:** React Navigation v6
+- **Testing:** Jest, React Native Testing Library, fast-check
 
-### Build Targets
-
-- iOS and Android via Expo EAS Build
-- Progressive Web App (PWA) with service worker
-- Android Trusted Web Activity (TWA) via Bubblewrap CLI
+### Example: WalletConnect Integration
+```ts
+import { WalletConnectProvider } from '@walletconnect/react-native-dapp';
+```
 
 ## Design System
 
-- **Typography**: Inter Bold (headers), Inter Regular (body), Roboto Mono (addresses/hashes)
-- **Colors**: Base brand palette (Primary #0052FF, Background #0A0B0D, Surface #1A1B1F)
-- **Spacing**: 48px button height, 64px bottom nav, 12px button radius, 16px card radius
-- **Accessibility**: Minimum 44x44px touch targets
+- **Typography:** Inter Bold (headers), Inter Regular (body), Roboto Mono (addresses/hashes)
+- **Colors:** Primary #0052FF, Background #0A0B0D, Surface #1A1B1F
+- **Spacing:** 48px button, 64px nav, 12px/16px radius
+- **Accessibility:** 44x44px min touch targets, alt text for all images
 
 ## Network Configuration
 
-- **Base Mainnet**: https://mainnet.base.org (Chain ID 8453)
-- **Base Sepolia**: https://sepolia.base.org (Chain ID 84532)
+- **Base Mainnet:** https://mainnet.base.org (Chain ID 8453)
+- **Base Sepolia:** https://sepolia.base.org (Chain ID 84532)
+
+---
+All code/config examples and headings are formatted for accessibility.
 - **Block Explorer**: https://basescan.org
 
 ## Common Commands

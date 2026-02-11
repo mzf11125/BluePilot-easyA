@@ -38,8 +38,8 @@ const BASE_MAINNET: DeploymentConfig = {
 // Base Sepolia addresses
 const BASE_SEPOLIA: DeploymentConfig = {
   weth: "0x4200000000000000000000000000000000000006",
-  uniswapRouter: "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24", // Same address on Sepolia
-  uniswapFactory: "0x420ddd06267114ef9c2aa4af7ca253872243e5c1",
+  uniswapRouter: "0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD", // Uniswap V2 Router on Base Sepolia
+  uniswapFactory: "0x890bD8Ccb19263D40f043aEC1fc679e3DEf04C7C", // Uniswap V2 Factory on Base Sepolia
   feeRecipient: "0x0000000000000000000000000000000000000000",
   protocolFeeBps: 10,
   owner: "0x0000000000000000000000000000000000000000",
@@ -153,7 +153,8 @@ async function main() {
   const tradeExecutor = await TradeExecutor.deploy(
     routerAddress,
     wethAddress,
-    config.owner
+    config.owner,
+    ethers.ZeroAddress // robinPumpRouter (to be set later)
   );
   await tradeExecutor.waitForDeployment();
   const tradeExecutorAddress = await tradeExecutor.getAddress();
@@ -162,6 +163,7 @@ async function main() {
     routerAddress,
     wethAddress,
     config.owner,
+    ethers.ZeroAddress,
   ]);
 
   // Deploy VaultRouter
@@ -173,7 +175,8 @@ async function main() {
     tradeExecutorAddress,
     config.feeRecipient,
     config.protocolFeeBps,
-    config.owner
+    config.owner,
+    ethers.ZeroAddress // robinPumpRouter (to be set later)
   );
   await vaultRouter.waitForDeployment();
   const vaultRouterAddress = await vaultRouter.getAddress();
@@ -185,6 +188,7 @@ async function main() {
     config.feeRecipient,
     config.protocolFeeBps,
     config.owner,
+    ethers.ZeroAddress,
   ]);
 
   // Verify deployment

@@ -5,6 +5,9 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import { authenticateApiKey, rateLimit, requestLogger, errorHandler } from "./middleware/auth.js";
 import agentRoutes from "./routes/agent.js";
+import launchesRoutes from "./routes/launches.js";
+import autoTradingRoutes from "./routes/auto-trading.js";
+import socialRoutes from "./routes/social.js";
 
 // Load environment variables
 dotenv.config();
@@ -43,6 +46,9 @@ app.get("/health", (req, res) => {
 
 // API routes
 app.use("/api/agent", authenticateApiKey, agentRoutes);
+app.use("/api/launches", authenticateApiKey, launchesRoutes);
+app.use("/api/auto-trading", authenticateApiKey, autoTradingRoutes);
+app.use("/api/social", authenticateApiKey, socialRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -63,13 +69,10 @@ app.listen(PORT, () => {
 ║   Environment: ${process.env.NODE_ENV || "development"}                      ║
 ║                                                          ║
 ║   Endpoints:                                             ║
-║     POST /api/agent/simulate                             ║
-║     POST /api/agent/execute                              ║
-║     GET  /api/agent/policy                               ║
-║     POST /api/agent/policy                               ║
-║     GET  /api/agent/history                              ║
-║     GET  /api/agent/balance                              ║
-║     GET  /api/agent/health                               ║
+║     /api/agent/*                                         ║
+║     /api/launches/*                                      ║
+║     /api/auto-trading/*                                  ║
+║     /api/social/*                                        ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
   `);

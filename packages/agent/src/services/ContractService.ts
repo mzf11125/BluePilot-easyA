@@ -358,6 +358,203 @@ export class ContractService {
   getProvider(): ethers.JsonRpcProvider {
     return this.provider;
   }
+
+  /**
+   * Get token risk score based on maturity and trading data
+   * @param tokenAddress Token address to assess
+   * @returns Risk score (0-100, higher = riskier) and factors
+   */
+  async getTokenRiskScore(tokenAddress: string): Promise<{
+    score: number;
+    factors: {
+      isNewToken: boolean;
+      isRobinPump: boolean;
+      lowLiquidity: boolean;
+      recentlyGraduated: boolean;
+    };
+  }> {
+    const factors = {
+      isNewToken: false,
+      isRobinPump: false,
+      lowLiquidity: false,
+      recentlyGraduated: false,
+    };
+
+    let score = 0;
+
+    // Skip if ETH
+    if (tokenAddress === ethers.ZeroAddress) {
+      return { score: 0, factors };
+    }
+
+    // Get token info - if it fails, token may not exist
+    try {
+      const token = this.getContract(tokenAddress, ERC20_ABI);
+      const totalSupply = await token.totalSupply();
+      const supply = BigInt(totalSupply.toString());
+
+      // Check if low supply (new token)
+      if (supply < ethers.parseEther("1000000")) {
+        factors.isNewToken = true;
+        score += 20;
+      }
+    } catch (error) {
+      // Token doesn't exist or failed
+      factors.isNewToken = true;
+      score += 50;
+    }
+
+    // Check if RobinPump token (would need RobinPumpService)
+    // For now, assume new tokens on Base could be RobinPump
+    if (factors.isNewToken) {
+      factors.isRobinPump = true;
+      score += 30;
+    }
+
+    // Ensure score is between 0-100
+    score = Math.min(100, Math.max(0, score));
+
+    return { score, factors };
+  }
+
+  /**
+   * Get the best route for a trade across multiple DEXs
+   * @param tokenIn Input token address
+   * @param tokenOut Output token address
+   * @param amountIn Amount to trade
+   * @param preferences Optional DEX preferences
+   * @returns Best route with expected output
+   */
+  async getBestRoute(
+    tokenIn: string,
+    tokenOut: string,
+    amountIn: string,
+    preferences: {
+      preferredRouter?: "auto" | "uniswap_v2" | "robinpump";
+      enableRobinPump?: boolean;
+    } = {}
+  ): Promise<{
+    router: string;
+    expectedAmountOut: string;
+    priceImpact: number;
+  }> {
+    // Default to Uniswap V2 for established tokens
+    const amountInWei = ethers.parseEther(amountIn);
+    let bestRouter = "uniswap_v2";
+    let bestAmountOut = 0n;
+
+    // Check RobinPump if enabled and applicable
+    if (preferences.enableRobinPump && preferences.preferredRouter !== "uniswap_v2") {
+      // Would integrate with RobinPumpService here
+      // For now, use Uniswap V2 as default
+    }
+
+    // Get Uniswap V2 price
+    try {
+      const uniswapRouter = process.env.UNISWAP_V2_ROUTER || this.networkConfig.uniswapRouter;
+      const routerContract = this.getContract(
+        uniswapRouter,
+        ["function getAmountsOut(uint256 amountIn, address[] calldata path) returns (uint256[] amounts)"]
+      );
+
+      const fromToken = tokenIn === ethers.ZeroAddress
+        ? this.networkConfig.wethAddress
+        : tokenIn;
+      const toToken = tokenOut === ethers.ZeroAddress
+        ? this.networkConfig.wethAddress
+        : tokenOut;
+
+      const path = [fromToken, toToken];
+      const amounts = await routerContract.getAmountsOut(amountInWei, path);
+      bestAmountOut = BigInt(amounts[amounts.length - 1].toString());
+    } catch (error) {
+      console.error("Error getting Uniswap price:", error);
+    }
+
+    return {
+      router: bestRouter,
+      expectedAmountOut: bestAmountOut.toString(),
+      priceImpact: 0, // TODO: Calculate actual price impact
+    };
+  }
+
+  /**
+   * Get extended policy for a user
+   * @param vaultRouterAddress VaultRouter contract address
+   * @param userAddress User address
+   * @returns Extended policy with DEX routing preferences
+   */
+  async getExtendedPolicy(
+    vaultRouterAddress: string,
+    userAddress: string
+  ): Promise<{
+    maxNewTokenTradeSize: string;
+    enableRobinPump: boolean;
+    forceUniswap: boolean;
+    minLiquidityThreshold: string;
+  }> {
+    const vaultRouter = this.getContract(vaultRouterAddress, VAULT_ROUTER_ABI);
+
+    try {
+      const policy = await vaultRouter.getExtendedPolicy(userAddress);
+      return {
+        maxNewTokenTradeSize: policy.maxNewTokenTradeSize.toString(),
+        enableRobinPump: policy.enableRobinPump,
+        forceUniswap: policy.forceUniswap,
+        minLiquidityThreshold: policy.minLiquidityThreshold.toString(),
+      };
+    } catch (error) {
+      // Return defaults if extended policy not set
+      return {
+        maxNewTokenTradeSize: ethers.parseEther("0.5").toString(),
+        enableRobinPump: true,
+        forceUniswap: false,
+        minLiquidityThreshold: ethers.parseEther("10").toString(),
+      };
+    }
+  }
+
+  /**
+   * Generate transaction data for trade with DEX routing
+   * @param vaultRouterAddress VaultRouter contract address
+   * @param tokenIn Input token address
+   * @param tokenOut Output token address
+   * @param amountIn Amount to trade
+   * @param minAmountOut Minimum amount to receive
+   * @param preferredRouter Preferred DEX router
+   * @returns Transaction data
+   */
+  async generateRoutedTradeTransaction(
+    vaultRouterAddress: string,
+    tokenIn: string,
+    tokenOut: string,
+    amountIn: string,
+    minAmountOut: string,
+    preferredRouter: "auto" | "uniswap_v2" | "robinpump" = "auto"
+  ): Promise<TransactionData> {
+    const vaultRouter = this.getContract(vaultRouterAddress, VAULT_ROUTER_ABI);
+    const amountInWei = ethers.parseEther(amountIn);
+    const minAmountOutWei = ethers.parseEther(minAmountOut);
+
+    // Map string router to enum
+    const routerEnum =
+      preferredRouter === "uniswap_v2" ? 0 : preferredRouter === "robinpump" ? 1 : 2;
+
+    // Encode transaction data for executeTradeWithRouter
+    const data = vaultRouter.interface.encodeFunctionData("executeTradeWithRouter", [
+      tokenIn,
+      tokenOut,
+      amountInWei,
+      minAmountOutWei,
+      routerEnum,
+    ]);
+
+    return {
+      to: vaultRouterAddress,
+      data,
+      value: "0",
+    };
+  }
 }
 
 // Singleton instance

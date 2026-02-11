@@ -252,6 +252,7 @@ export const NETWORKS: Record<number, NetworkConfig> = {
     explorerUrl: "https://basescan.org",
     wethAddress: "0x4200000000000000000000000000000000000006",
     uniswapRouter: "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24",
+    robinPumpRouter: process.env.ROBINPUMP_ROUTER || "0x0000000000000000000000000000000000000000",
   },
   84532: {
     chainId: 84532,
@@ -260,5 +261,252 @@ export const NETWORKS: Record<number, NetworkConfig> = {
     explorerUrl: "https://sepolia.basescan.org",
     wethAddress: "0x4200000000000000000000000000000000000006",
     uniswapRouter: "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24",
+    robinPumpRouter: process.env.ROBINPUMP_ROUTER || "0x0000000000000000000000000000000000000000",
   },
 };
+
+// ============================================================================
+// RobinPump Types
+// ============================================================================
+
+export interface TokenLaunch {
+  /** Token address */
+  token: string;
+  /** Creator address */
+  creator: string;
+  /** Token name */
+  name: string;
+  /** Token symbol */
+  symbol: string;
+  /** Token image URI */
+  image: string;
+  /** Token description */
+  description: string;
+  /** Creation timestamp */
+  createdAt: number;
+  /** Total ETH raised */
+  raisedAmount: string;
+  /** Current market cap */
+  marketCap: string;
+  /** Whether token has graduated to DEX */
+  graduated: boolean;
+  /** Whether still on bonding curve */
+  bondingCurve: boolean;
+}
+
+export interface BondingCurveInfo {
+  /** Total tokens minted */
+  totalSupply: string;
+  /** Total ETH raised */
+  raisedAmount: string;
+  /** ETH amount needed to graduate */
+  graduationPoint: string;
+  /** Progress towards graduation (basis points) */
+  progress: number;
+}
+
+// ============================================================================
+// Trading Signal Types
+// ============================================================================
+
+export type SignalType =
+  | "PRICE_SPIKE"
+  | "VOLUME_SURGE"
+  | "LAUNCH_MOMENTUM"
+  | "WHALE_ACCUMULATION"
+  | "SOCIAL_SENTIMENT"
+  | "GRADUATION_IMMINENT";
+
+export interface TradingSignal {
+  /** Unique signal ID */
+  id: string;
+  /** Signal type */
+  type: SignalType;
+  /** Token address */
+  token: string;
+  /** Signal timestamp */
+  timestamp: number;
+  /** Confidence score (0-100) */
+  confidence: number;
+  /** Signal metadata */
+  metadata: {
+    /** Current price */
+    currentPrice: string;
+    /** Price change (basis points) */
+    priceChange: number;
+    /** 24h volume */
+    volume24h?: string;
+    /** Market cap */
+    marketCap?: string;
+  };
+  /** Suggested action */
+  action?: "BUY" | "SELL" | "HOLD";
+}
+
+// ============================================================================
+// Auto Trading Types
+// ============================================================================
+
+export type RiskLevel = "CONSERVATIVE" | "MODERATE" | "AGGRESSIVE";
+
+export interface AutoTradeConfig {
+  /** Whether auto-trading is enabled */
+  enabled: boolean;
+  /** User ID */
+  userId: string;
+  /** User's wallet address */
+  walletAddress: string;
+  /** Maximum ETH per trade */
+  maxTradeSize: string;
+  /** Maximum total ETH per day */
+  maxDailyVolume: string;
+  /** Minimum confidence to execute (0-100) */
+  minConfidence: number;
+  /** Allowed signal types */
+  allowedSignalTypes: SignalType[];
+  /** Risk tolerance level */
+  riskLevel: RiskLevel;
+  /** Stop loss in basis points */
+  stopLossBps?: number;
+  /** Take profit in basis points */
+  takeProfitBps?: number;
+  /** Maximum open positions */
+  maxOpenPositions: number;
+}
+
+export interface AutoTradeResult {
+  /** Associated signal ID */
+  signalId: string;
+  /** Whether trade was executed */
+  executed: boolean;
+  /** Transaction hash */
+  txHash?: string;
+  /** Error message if failed */
+  error?: string;
+  /** Result timestamp */
+  timestamp: number;
+}
+
+export interface Position {
+  /** Token address */
+  token: string;
+  /** Token amount */
+  amount: string;
+  /** Entry price */
+  entryPrice: string;
+  /** Current price */
+  currentPrice: string;
+  /** Profit/Loss */
+  pnl: string;
+  /** Position open time */
+  openedAt: number;
+  /** Signal ID that triggered position */
+  signalId: string;
+}
+
+// ============================================================================
+// Social Trading Types
+// ============================================================================
+
+export interface TraderProfile {
+  /** Trader address */
+  address: string;
+  /** Username */
+  username?: string;
+  /** Avatar URI */
+  avatar?: string;
+  /** Bio/description */
+  bio?: string;
+  /** Trading statistics */
+  stats: {
+    /** Total number of trades */
+    totalTrades: number;
+    /** Number of winning trades */
+    winningTrades: number;
+    /** Total volume traded (in wei) */
+    volumeTraded: string;
+    /** ROI in basis points */
+    roi: number;
+    /** Average hold time (seconds) */
+    avgHoldTime: number;
+    /** Sharpe ratio */
+    sharpeRatio: number;
+    /** Maximum drawdown (basis points) */
+    maxDrawdown: number;
+  };
+  /** Copy trading preferences */
+  preferences: {
+    /** Whether copy trading is allowed */
+    allowCopyTrading: boolean;
+    /** Fee charged to copiers (basis points) */
+    copyTradingFee?: number;
+    /** Minimum amount to copy */
+    minCopyAmount?: string;
+  };
+  /** Trader tags */
+  tags: string[];
+  /** Profile creation time */
+  createdAt: number;
+  /** Last update time */
+  updatedAt: number;
+}
+
+export interface CopyTradeConfig {
+  /** Copier's wallet address */
+  copierAddress: string;
+  /** Trader to copy */
+  traderAddress: string;
+  /** Whether copying is enabled */
+  enabled: boolean;
+  /** Percentage of portfolio to allocate */
+  allocationPercentage: number;
+  /** Maximum trade size */
+  maxTradeSize: string;
+  /** Minimum trade size */
+  minTradeSize: string;
+  /** Whether to copy sell trades */
+  copySellTrades: boolean;
+  /** Slippage multiplier (e.g., 1.0 = same, 1.1 = 10% more tolerance) */
+  slippageMultiplier: number;
+  /** Stop copying if trader loses X% */
+  stopOnTraderLoss: number;
+}
+
+export interface CopyTradeResult {
+  /** Copier's address */
+  copierAddress: string;
+  /** Trader being copied */
+  traderAddress: string;
+  /** Original trade transaction hash */
+  originalTxHash: string;
+  /** Copy trade transaction hash */
+  newTxHash?: string;
+  /** Whether copy was executed */
+  executed: boolean;
+  /** Error if failed */
+  error?: string;
+  /** Amount that was copied */
+  amountCopied: string;
+  /** Result timestamp */
+  timestamp: number;
+}
+
+export interface LeaderboardEntry {
+  /** Rank on leaderboard */
+  rank: number;
+  /** Trader profile */
+  trader: TraderProfile;
+  /** Time period */
+  period: "24H" | "7D" | "30D" | "ALL";
+  /** Performance metrics */
+  metrics: {
+    /** ROI in basis points */
+    roi: number;
+    /** Volume traded (in wei) */
+    volume: string;
+    /** Number of trades */
+    trades: number;
+    /** Win rate percentage */
+    winRate: number;
+  };
+}

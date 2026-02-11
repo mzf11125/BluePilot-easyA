@@ -57,7 +57,7 @@ interface IUniswapV2Router02 {
     /// @param path The token path
     /// @param to Recipient address
     /// @param deadline Transaction deadline
-    /// @return amounts[0] Input amount used
+    /// @return amounts Array where amounts[0] is input amount used
     function swapTokensForExactTokens(
         uint256 amountOut,
         uint256 amountInMax,

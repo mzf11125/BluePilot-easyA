@@ -18,9 +18,9 @@ Powered by secure smart contracts, an AI agent, and a modern mobile app, BluePil
 
 ```mermaid
 graph TD
-	A[Mobile App (React Native/Expo)] -- WalletConnect, Policy, Trade, History --> B[BluePilot Agent]
-	B -- Gateway Protocol --> C[Smart Contracts (Base L2)]
-	C -- VaultRouter, TradeExecutor, PolicyGuard --> D[DEX (Uniswap V2 on Base)]
+	A[Mobile App] -- WalletConnect, Policy, Trade, History --> B[BluePilot Agent]
+	B -- Gateway Protocol --> C[Smart Contracts Base L2]
+	C -- VaultRouter, TradeExecutor, PolicyGuard --> D[DEX Uniswap V2 on Base]
 	C -- Events --> A
 ```
 
@@ -119,3 +119,4 @@ cp .env.example .env
 ## License
 
 MIT
+
